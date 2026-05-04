@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Acceso Móvil | Bienvenido</title>
+  <style>
+    /* RESET BÁSICO Y ESTILOS GLOBALES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      background-color: #00B4D8;  /* CELESTE PRINCIPAL - FÁCIL DE CAMBIAR (variable personalizable) */
+      /* 🎨 INSTRUCCIÓN PARA CAMBIAR EL COLOR DE FONDO:
+         Modifica el valor de 'background-color' en la línea de arriba (#00B4D8) por el color que prefieras.
+         Ejemplos: #90E0EF (celeste claro), #0077B6 (azul profundo), #48CAE4 (azul turquesa)
+      */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Contenedor principal estilo móvil: centrado y adaptado */
+    .app-container {
+      width: 100%;
+      max-width: 400px;    /* ancho típico móvil */
+      margin: 0 auto;
+    }
+
+    /* TARJETA (recuadro redondeado) */
+    .card {
+      background-color: white;
+      border-radius: 36px;    /* bordes marcadamente redondeados */
+      padding: 32px 24px 40px 24px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+      backdrop-filter: blur(0px);
+      text-align: center;
+    }
+
+    /* Título Bienvenido */
+    .welcome-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #1E2A3E;
+      margin-bottom: 28px;
+      word-break: keep-all;
+    }
+
+    /* Contenedor del logo */
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .logo-img {
+      max-width: 110px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 20px;
+      background: #F8F9FA;
+      padding: 6px;
+      transition: transform 0.2s;
+    }
+
+    /* Etiqueta campo teléfono */
+    .phone-label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #2C3E50;
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+
+    /* Contenedor input con prefijo +52 */
+    .phone-input-container {
+      display: flex;
+      align-items: center;
+      background-color: #F3F4F6;
+      border-radius: 60px;
+      border: 1px solid #E2E8F0;
+      transition: all 0.2s ease;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .phone-input-container:focus-within {
+      border-color: #00B4D8;
+      box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2);
+      background-color: white;
+    }
+
+    /* Prefijo +52 fijo */
+    .prefix-code {
+      background-color: #F3F4F6;
+      padding: 0 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1F2937;
+      border-right: 1px solid #CBD5E1;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      letter-spacing: 0.3px;
+    }
+
+    .phone-input-container:focus-within .prefix-code {
+      background-color: white;
+    }
+
+    /* Campo de número telefónico */
+    .phone-number-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 0 16px;
+      font-size: 1rem;
+      height: 54px;
+      font-family: inherit;
+      font-weight: 500;
+      color: #0F172A;
+    }
+
+    .phone-number-input::placeholder {
+      color: #94A3B8;
+      font-weight: normal;
+      font-size: 0.9rem;
+    }
+
+    /* Botón continuar */
+    .continue-btn {
+      background-color: #0F172A;
+      width: 100%;
+      border: none;
+      border-radius: 60px;
+      padding: 16px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .continue-btn:active {
+      transform: scale(0.97);
+      background-color: #1E2A3E;
+    }
+
+    /* Mensaje de validación o error */
+    .feedback-message {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      border-radius: 60px;
+      background-color: #F1F5F9;
+      color: #1E293B;
+      display: inline-block;
+      width: auto;
+      transition: 0.2s;
+      font-weight: 500;
+    }
+
+    .error-feedback {
+      background-color: #FFE5E5;
+      color: #C62828;
+    }
+
+    .success-feedback {
+      background-color: #E0F2FE;
+      color: #0369A1;
+    }
+
+    /* Ajustes de espaciado en móvil */
+    @media (max-width: 480px) {
+      .card {
+        padding: 28px 20px 36px 20px;
+        border-radius: 32px;
+      }
+      .welcome-title {
+        font-size: 1.7rem;
+      }
+      .phone-number-input {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="card">
+    <!-- Saludo principal: ¡Bienvenido de nuevo! -->
+    <h1 class="welcome-title">¡Bienvenido de nuevo!</h1>
+
+    <!-- Logo desde carpeta img/logo.png -->
+    <div class="logo-wrapper">
+      <img class="logo-img" src="img/logo.jpeg" alt="Logo de la aplicación" onerror="this.onerror=null; this.src='https://placehold.co/110x110?text=Logo+no+encontrado'; this.style.background='#ffe0e0'">
+    </div>
+
+    <!-- Etiqueta + campo teléfono con prefijo +52 fijo -->
+    <label class="phone-label" for="telefonoInput">Ingresa tu número de teléfono</label>
+    <div class="phone-input-container">
+      <span class="prefix-code">+52</span>
+      <input type="tel" id="telefonoInput" class="phone-number-input" placeholder="55 1234 5678" inputmode="numeric" autocomplete="tel">
+    </div>
+
+    <!-- Botón continuar -->
+    <button class="continue-btn" id="continuarBtn">Continuar →</button>
+
+    <!-- Área de mensaje dinámico (feedback) -->
+    <div id="mensajeFeedback" class="feedback-message">Ingresa un número válido de 10 dígitos</div>
+  </div>
+</div>
+
+<script>
+  // Obtener elementos del DOM
+  const telefonoInput = document.getElementById('telefonoInput');
+  const continuarBtn = document.getElementById('continuarBtn');
+  const feedbackDiv = document.getElementById('mensajeFeedback');
+
+  // Función para limpiar y validar número telefónico (solo dígitos después del prefijo)
+  // El usuario debe escribir exactamente 10 dígitos (por ejemplo: 5512345678)
+  function limpiarYValidarNumero(rawValue) {
+    // Eliminar cualquier caracter que no sea dígito
+    let soloDigitos = rawValue.replace(/\D/g, '');
+    // Verificar que tenga exactamente 10 dígitos (formato mexicano estándar 10 dígitos)
+    if (soloDigitos.length === 10) {
+      return { esValido: true, numeroLimpio: soloDigitos, mensaje: '✅ Número válido' };
+    } else if (soloDigitos.length === 0) {
+      return { esValido: false, numeroLimpio: '', mensaje: '❌ El número no puede estar vacío' };
+    } else {
+      return { esValido: false, numeroLimpio: soloDigitos, mensaje: `❌ El número debe tener 10 dígitos (actual: ${soloDigitos.length})` };
+    }
+  }
+
+  // Mostrar feedback de validación (error o éxito)
+  function actualizarFeedback(esValido, mensaje) {
+    feedbackDiv.textContent = mensaje;
+    if (esValido) {
+      feedbackDiv.classList.remove('error-feedback');
+      feedbackDiv.classList.add('success-feedback');
+    } else {
+      feedbackDiv.classList.remove('success-feedback');
+      feedbackDiv.classList.add('error-feedback');
+    }
+  }
+
+  // Función que se ejecuta al hacer clic en "Continuar" o al presionar Enter
+  function manejarContinuar() {
+    const numeroRaw = telefonoInput.value.trim();
+    const { esValido, numeroLimpio, mensaje } = limpiarYValidarNumero(numeroRaw);
+    
+    if (esValido) {
+      // Construimos el número completo con el prefijo +52 que ya está establecido visualmente
+      const numeroCompleto = `+52${numeroLimpio}`;
+      actualizarFeedback(true, mensaje);
+      // Simular acción de envío o redirección (puedes personalizar más)
+      // Mostramos alerta simulando que se procesa el inicio de sesión
+      setTimeout(() => {
+        alert(`📱 Continuando con el número: ${numeroCompleto}\n✅ Acceso simulado correctamente.`);
+        // Aquí puedes agregar redirección a otra página si es necesario:
+        // window.location.href = "dashboard.html";
+      }, 50);
+    } else {
+      actualizarFeedback(false, mensaje);
+      // Pequeño efecto de vibración o foco en el campo
+      telefonoInput.focus();
+      telefonoInput.style.transform = 'scale(1.01)';
+      setTimeout(() => { telefonoInput.style.transform = ''; }, 200);
+    }
+  }
+
+  // Evento click del botón continuar
+  continuarBtn.addEventListener('click', manejarContinuar);
+
+  // Evento keypress en el input para que Enter también active continuar
+  telefonoInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      manejarContinuar();
+    }
+  });
+
+  // Validación en tiempo real: mientras escribe podemos actualizar feedback, pero con suavidad
+  // para mejor experiencia de usuario, aunque el botón hace la comprobación final.
+  telefonoInput.addEventListener('input', function(e) {
+    // Opcional: limitar entrada a solo números y máximo 10 dígitos (sin contar el prefijo)
+    // Primero permitimos digits pero también espacios o guiones al escribir, pero al validar se limpian.
+    let valor = this.value;
+    // Eliminar cualquier caracter que no sea dígito ni espacio, pero útil para experiencia
+    // No forzamos demasiado para respetar posibles separadores, pero recomendamos 10 dígitos al final.
+    // Mejor dejamos que el usuario escriba con formatos pero al validar limpiamos.
+    // Extra: si queremos feedback inmediato sin esperar clic, opcional pero no intrusivo:
+    if (valor.length > 0) {
+      const testDigitos = valor.replace(/\D/g, '');
+      if (testDigitos.length > 10) {
+        // si excede 10 dígitos recortamos visualmente pero sin romper cursor (mejor)
+        const recortado = testDigitos.slice(0,10);
+        // reconstruir manteniendo posición? solo mostramos feedback pero no recortamos agresivamente
+        if (testDigitos.length > 10) {
+          this.value = valor.slice(0, valor.length - (testDigitos.length - 10));
+        }
+      }
+    }
+    // limpiar clase de error mientras escribe, pero sin mensaje agresivo
+    if (feedbackDiv.classList.contains('error-feedback')) {
+      const { esValido: validacionParcial } = limpiarYValidarNumero(this.value);
+      if (validacionParcial) {
+        feedbackDiv.classList.remove('error-feedback');
+        feedbackDiv.classList.add('success-feedback');
+        feedbackDiv.textContent = '✅ Formato correcto (10 dígitos)';
+      } else {
+        feedbackDiv.classList.remove('success-feedback');
+        feedbackDiv.classList.add('error-feedback');
+        feedbackDiv.textContent = '📞 Debe tener 10 dígitos';
+      }
+    }
+  });
+
+  // Si el usuario pega texto, limpiar caracteres no numéricos suavemente sin romper UX
+  telefonoInput.addEventListener('paste', function(e) {
+    setTimeout(() => {
+      let raw = telefonoInput.value;
+      let soloDigitos = raw.replace(/\D/g, '');
+      if (soloDigitos.length > 10) {
+        soloDigitos = soloDigitos.slice(0,10);
+      }
+      // No forzar sobreescritura brusca si el usuario quiere espacios, pero preferimos limpiar para UX limpia
+      telefonoInput.value = soloDigitos;
+      const { esValido, mensaje } = limpiarYValidarNumero(soloDigitos);
+      if (!esValido && soloDigitos.length >0) {
+        actualizarFeedback(false, mensaje);
+      } else if (esValido) {
+        actualizarFeedback(true, mensaje);
+      } else {
+        if (soloDigitos.length===0) feedbackDiv.textContent = 'Ingresa tu número de teléfono';
+      }
+    }, 10);
+  });
+
+  // Inicializar estado del feedback sin errores molestos al cargar
+  setTimeout(() => {
+    if (telefonoInput.value === "") {
+      feedbackDiv.classList.remove('error-feedback', 'success-feedback');
+      feedbackDiv.classList.add('feedback-message');
+      feedbackDiv.textContent = 'Ingresa un número válido de 10 dígitos';
+    }
+  }, 0);
+
+  // Instrucción amigable para desarrollador: cómo cambiar color de fondo
+  console.log('💡 Personalización: Cambiar fondo celeste en CSS: body { background-color: #TU_COLOR; }');
+</script>
+
+<!-- 
+  ★ INSTRUCCIONES PARA CAMBIAR EL COLOR DE FONDO CELESTE ★
+  - Abre el bloque <style> en la parte superior.
+  - Localiza la regla CSS de 'body' (línea ~18).
+  - Reemplaza el valor 'background-color: #00B4D8;' por el color deseado.
+  - Ejemplos: #CAF0F8 (celeste muy claro), #48CAE4 (azul celeste vibrante), #0096C7 (azul intenso).
+  
+  ★ NOTAS DEL LOGO:
+  - La imagen debe estar en la carpeta 'img' con nombre 'logo.png'
+  - Si no se encuentra, se mostrará un placeholder para evitar errores visuales.
+  
+  ★ VALIDACIÓN DEL TELÉFONO:
+  - Prefijo +52 fijo mostrado visualmente, no es editable.
+  - Se espera un número de 10 dígitos (ejemplo: 5512345678). El botón 'Continuar' valida y muestra mensaje.
+  
+  ★ INTERFAZ TIPO APP MÓVIL:
+  - Diseño tipo card, sombras fluidas, input redondeado, botón con respuesta táctil.
+  - Totalmente responsivo y adaptado a pantallas pequeñas.
+-->
+</body>
+</html>
